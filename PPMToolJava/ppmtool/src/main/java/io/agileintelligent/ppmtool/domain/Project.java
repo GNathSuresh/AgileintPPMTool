@@ -1,6 +1,10 @@
 package io.agileintelligent.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -9,15 +13,24 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Project name cannot be blank")
     private String projectName;
+
+    @NotBlank(message = "Project Id cannot be blank")
+    @Size(min = 4, max= 5, message = "Project Id needs to be 4 or 5 characters")
+    @Column(unique = true, updatable = false)
     private String projectIdentifier;
+
+    @NotBlank(message = "Project Description cannot be blank")
     private String projectDescription;
 
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date start_date;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date end_date;
-
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date created_at;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_at;
 
     @PrePersist
