@@ -6,6 +6,10 @@ import io.agileintelligent.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
+
 @Service
 public class ProjectService {
 
@@ -23,5 +27,16 @@ public class ProjectService {
             throw new ProjectIdException("The Project "+project.getProjectIdentifier()+ " is not unique");
         }
         return saveProject;
+    }
+
+    public Project findProjectByIdentifier(String projectIdentifier)
+    {
+        Project project = projectRepository.findByProjectIdentifier(projectIdentifier);
+        if(isNull(project))
+        {
+            throw new ProjectIdException("Project id "+projectIdentifier+ " does not exists");
+        }
+
+        return project;
     }
 }
