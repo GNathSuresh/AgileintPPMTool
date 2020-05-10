@@ -23,6 +23,7 @@ public class ProjectService {
         try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             saveProject = projectRepository.save(project);
+            projectRepository.
         }
         catch (Exception ex)
         {
