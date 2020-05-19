@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const CreatePojectButton = () => {
+const CreateProjectButton = () => {
   return (
     <React.Fragment>
       <Link to="/addProject" className="btn btn-lg btn-info">
@@ -10,4 +10,4 @@ const CreatePojectButton = () => {
     </React.Fragment>
   );
 };
-export default CreatePojectButton;
+export default CreateProjectButton;
