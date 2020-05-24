@@ -2,16 +2,18 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { createProject } from "../../actions/projectActions";
 import { connect } from "react-redux";
+import { isRegExp } from "util";
 
 class AddProject extends Component {
   constructor() {
     super();
     this.state = {
       projectName: "",
-      projectIdentifier: "",
+      projectIdentifier: null,
       projectDescription: "",
       start_date: "",
-      end_date: ""
+      end_date: "",
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
@@ -25,6 +27,13 @@ class AddProject extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  // Life cycle hooks
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   }
 
   onSubmit(e) {
@@ -41,6 +50,7 @@ class AddProject extends Component {
     this.props.createProject(newProject, this.props.history);
   }
   render() {
+    const { errors } = this.state;
     return (
       <div>
         {
@@ -71,6 +81,7 @@ class AddProject extends Component {
                       value={this.state.projectName}
                       onChange={this.onChange}
                     />
+                    <p>{errors.projectName}</p>
                   </div>
                   <div className="form-group">
                     <input
@@ -81,6 +92,7 @@ class AddProject extends Component {
                       value={this.state.projectIdentifier}
                       onChange={this.onChange}
                     />
+                    <p>{errors.projectIdentifier}</p>
                   </div>
 
                   <div className="form-group">
@@ -91,6 +103,7 @@ class AddProject extends Component {
                       value={this.state.projectDescription}
                       onChange={this.onChange}
                     ></textarea>
+                    <p>{errors.projectDescription}</p>
                   </div>
                   <h6>Start Date</h6>
                   <div className="form-group">
@@ -128,7 +141,12 @@ class AddProject extends Component {
 }
 
 AddProject.propTypes = {
-  createProject: PropTypes.func.isRequired
+  createProject: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
-export default connect(null, { createProject })(AddProject);
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { createProject })(AddProject);
