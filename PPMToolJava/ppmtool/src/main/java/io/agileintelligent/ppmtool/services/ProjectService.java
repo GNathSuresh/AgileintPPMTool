@@ -1,7 +1,9 @@
 package io.agileintelligent.ppmtool.services;
 
+import io.agileintelligent.ppmtool.domain.Backlog;
 import io.agileintelligent.ppmtool.domain.Project;
 import io.agileintelligent.ppmtool.exceptions.ProjectIdException;
+import io.agileintelligent.ppmtool.repository.BacklogRepository;
 import io.agileintelligent.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,28 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private BacklogRepository backlogRepository;
+
     public Project createOrUpdateProject(Project project)
     {
         Project saveProject;
         try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
-            saveProject = projectRepository.save(project);
+            if(isNull(project.getId()))
+            {
+                Backlog backlog = new Backlog();
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+                backlog.setProject(project);
+                project.setBacklog(backlog);
+            }
 
+            else {
+                Backlog backlog = backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+                project.setBacklog(backlog);
+            }
+
+            saveProject = projectRepository.save(project);
         }
         catch (Exception ex)
         {

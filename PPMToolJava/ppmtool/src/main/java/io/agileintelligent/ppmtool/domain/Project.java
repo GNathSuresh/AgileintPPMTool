@@ -1,6 +1,7 @@
 package io.agileintelligent.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +34,9 @@ public class Project {
     private Date created_at;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_at;
+
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "project" , cascade = CascadeType.ALL)
+    private Backlog backlog;
 
     @PrePersist
     public void onCreate()
@@ -111,5 +115,13 @@ public class Project {
 
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 }

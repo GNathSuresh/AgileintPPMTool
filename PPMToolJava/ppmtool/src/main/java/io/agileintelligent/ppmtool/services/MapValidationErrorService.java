@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MapValidationErrorService {
-    public ResponseEntity<?> validProject(BindingResult bindingResult)
+    public ResponseEntity<?> validEntity(BindingResult bindingResult)
     {
         if(bindingResult.hasFieldErrors())
         {

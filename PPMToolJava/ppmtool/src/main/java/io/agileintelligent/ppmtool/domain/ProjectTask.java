@@ -1,11 +1,13 @@
 package io.agileintelligent.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
-public class ProjectItem {
+public class ProjectTask {
 
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,11 @@ public class ProjectItem {
      private String status;
      private String projectSequence;
 
+     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+     @JoinColumn(name = "backlog_id" , updatable = false, nullable = false)
+     @JsonIgnore
+     private Backlog backlog;
+
      @PrePersist
      public void onCreate()
      {
@@ -37,7 +44,7 @@ public class ProjectItem {
          this.updated_date = new Date();
      }
 
-    public ProjectItem() {
+    public ProjectTask() {
     }
 
     public Long getId() {
@@ -118,6 +125,14 @@ public class ProjectItem {
 
     public void setProjectSequence(String projectSequence) {
         this.projectSequence = projectSequence;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @Override
