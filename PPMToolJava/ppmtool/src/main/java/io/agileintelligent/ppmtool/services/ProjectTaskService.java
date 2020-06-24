@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -27,7 +28,8 @@ public class ProjectTaskService {
         {
             Integer nextPtSequect = backlog.getPTSequence() + 1;
             String projectTaskIdentifier = projectIdentifier + "-" + nextPtSequect;
-            projectTask.setProjectIdentifier(projectTaskIdentifier);
+            projectTask.setProjectIdentifier(projectIdentifier);
+            projectTask.setProjectSequence(projectTaskIdentifier);
             backlog.setPTSequence(nextPtSequect);
             projectTask.setBacklog(backlog);
             if(Objects.isNull(projectTask.getPriority()))
@@ -41,6 +43,10 @@ public class ProjectTaskService {
             }
         }
         return projectTask;
+    }
+
+    public Iterable<ProjectTask> findByBacklogProjectIdentifier(String backlog_identifier) {
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_identifier);
     }
 }
 

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -32,5 +33,12 @@ public class BacklogController {
         }
         ProjectTask savedTask = projectTaskService.addProjectTask(projectIdentifier, projectTask);
         return new ResponseEntity<ProjectTask>(savedTask, HttpStatus.OK);
+    }
+
+    @GetMapping("/{backlog_identifier}")
+    public Iterable<ProjectTask> getProjectBackLogWithProjectTasks(@PathVariable String backlog_identifier)
+    {
+        return projectTaskService.findByBacklogProjectIdentifier(backlog_identifier);
+
     }
 }
