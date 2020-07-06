@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public class BacklogController {
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/addProjectTask/{projectIdentifier}")
-    public ResponseEntity<?> addProjectTask(@RequestBody ProjectTask projectTask , @PathVariable String projectIdentifier, BindingResult bindingResult)
+    public ResponseEntity<?> addProjectTask(@RequestBody @Valid ProjectTask projectTask , @PathVariable String projectIdentifier, BindingResult bindingResult)
     {
         ResponseEntity<?> responseEntity = mapValidationErrorService.validEntity(bindingResult);
         if(Objects.nonNull(responseEntity))

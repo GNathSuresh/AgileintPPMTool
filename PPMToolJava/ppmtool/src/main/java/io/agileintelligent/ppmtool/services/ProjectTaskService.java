@@ -1,8 +1,11 @@
 package io.agileintelligent.ppmtool.services;
 
 import io.agileintelligent.ppmtool.domain.Backlog;
+import io.agileintelligent.ppmtool.domain.Project;
 import io.agileintelligent.ppmtool.domain.ProjectTask;
+import io.agileintelligent.ppmtool.exceptions.ProjectNotFoundException;
 import io.agileintelligent.ppmtool.repository.BacklogRepository;
+import io.agileintelligent.ppmtool.repository.ProjectRepository;
 import io.agileintelligent.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,9 @@ public class ProjectTaskService {
 
     @Autowired
     private ProjectTaskRepository projectTaskRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
 
     public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask)
@@ -42,10 +48,19 @@ public class ProjectTaskService {
                 projectTask = projectTaskRepository.save(projectTask);
             }
         }
+        else
+        {
+            throw new ProjectNotFoundException("Project is not Found");
+        }
         return projectTask;
     }
 
     public Iterable<ProjectTask> findByBacklogProjectIdentifier(String backlog_identifier) {
+        Project project = projectRepository.findByProjectIdentifier(backlog_identifier);
+        if(Objects.isNull(project))
+        {
+            throw new ProjectNotFoundException("Project with ID '"+backlog_identifier+"' does not exists");
+        }
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_identifier);
     }
 }
