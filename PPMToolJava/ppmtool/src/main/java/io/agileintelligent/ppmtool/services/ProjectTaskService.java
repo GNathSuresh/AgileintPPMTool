@@ -63,6 +63,13 @@ public class ProjectTaskService {
         }
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_identifier);
     }
+
+    public ProjectTask findProjectTaskByBacklogIdAndSequence(String backlog_id, String sequence)
+    {
+        //TODO verify the Project exists for the back log id and then fetch the project sequence
+
+        return projectTaskRepository.findByProjectSequence(sequence);
+    }
 }
 
 
