@@ -99,6 +99,15 @@ public class ProjectTaskService {
         }
         return projectTask;
     }
+
+    public void deleteProjectTask(String backlog_id, String sequence)
+    {
+        ProjectTask projectTask = findProjectTaskByBacklogIdAndSequence(backlog_id, sequence);
+        if(Objects.nonNull(projectTask))
+        {
+            projectTaskRepository.delete(projectTask);
+        }
+    }
 }
 
 
