@@ -25,7 +25,7 @@ public class BacklogController {
     private MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("/addProjectTask/{projectIdentifier}")
-    public ResponseEntity<?> addProjectTask(@RequestBody @Valid ProjectTask projectTask , @PathVariable String projectIdentifier, BindingResult bindingResult)
+    public ResponseEntity<?> addProjectTask(@Valid @RequestBody ProjectTask projectTask , BindingResult bindingResult, @PathVariable String projectIdentifier)
     {
         ResponseEntity<?> responseEntity = mapValidationErrorService.validEntity(bindingResult);
         if(Objects.nonNull(responseEntity))
@@ -48,5 +48,19 @@ public class BacklogController {
     {
         ProjectTask projectTask = projectTaskService.findProjectTaskByBacklogIdAndSequence(backlog_identifier, sequence);
         return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{backlog_identifier}/{sequence}")
+    public  ResponseEntity<?> updateProjectTaskByProjectSequence(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult,
+                                                                 @PathVariable String backlog_identifier, @PathVariable String sequence)
+    {
+        ResponseEntity<?> responseEntity = mapValidationErrorService.validEntity(bindingResult);
+        if(Objects.nonNull(responseEntity))
+        {
+            return responseEntity; // BAD Request
+        }
+
+        ProjectTask updatedProjectTask = projectTaskService.updateProjectTask(projectTask,backlog_identifier,sequence);
+        return new ResponseEntity<ProjectTask>(updatedProjectTask, HttpStatus.OK);
     }
 }
