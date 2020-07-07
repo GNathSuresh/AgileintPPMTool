@@ -67,6 +67,23 @@ public class ProjectTaskService {
     public ProjectTask findProjectTaskByBacklogIdAndSequence(String backlog_id, String sequence)
     {
         //TODO verify the Project exists for the back log id and then fetch the project sequence
+        Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
+        if(Objects.isNull(backlog))
+        {
+            throw new ProjectNotFoundException("Project with ID:'"+backlog_id+"' does not exists");
+        }
+
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(sequence);
+
+        if(Objects.isNull(projectTask))
+        {
+            throw new ProjectNotFoundException("Project with Project Task: '"+sequence+"' does not exits");
+        }
+
+        if(!projectTask.getProjectIdentifier().equals(backlog_id))
+        {
+            throw new ProjectNotFoundException("For Project with ID '"+backlog_id+"' No task exists by Task'"+sequence+"'");
+        }
 
         return projectTaskRepository.findByProjectSequence(sequence);
     }
