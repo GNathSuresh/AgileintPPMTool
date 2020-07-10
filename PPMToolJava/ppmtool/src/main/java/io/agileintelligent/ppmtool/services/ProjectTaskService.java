@@ -38,11 +38,11 @@ public class ProjectTaskService {
             projectTask.setProjectSequence(projectTaskIdentifier);
             backlog.setPTSequence(nextPtSequect);
             projectTask.setBacklog(backlog);
-            if(Objects.isNull(projectTask.getPriority()))
+            if(Objects.isNull(projectTask.getPriority()) || projectTask.getPriority() == 0)
             {
                 projectTask.setPriority(3); // Low priority
             }
-            if(Objects.isNull(projectTask.getStatus()) || StringUtils.isEmpty(projectTask.getStatus()))
+            if(!(Objects.isNull(projectTask.getStatus()) || StringUtils.isEmpty(projectTask.getStatus())))
             {
                 projectTask.setStatus("TO-DO");
                 projectTask = projectTaskRepository.save(projectTask);
