@@ -15,7 +15,7 @@ public class MapValidationErrorService {
         if(bindingResult.hasFieldErrors())
         {
             Map<String,String> mapErrors = bindingResult.getFieldErrors().stream().collect(Collectors.toMap(x->x.getField(), x->x.getDefaultMessage()));
-            return new ResponseEntity<>(mapErrors, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(mapErrors, HttpStatus.BAD_REQUEST);
         }
 
         return null;

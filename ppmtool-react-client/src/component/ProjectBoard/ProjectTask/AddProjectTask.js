@@ -23,6 +23,13 @@ class AddProjectTask extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  // Life cycle hooks
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -35,7 +42,6 @@ class AddProjectTask extends Component {
       dueDate: this.state.dueDate,
       priority: this.state.priority,
       status: this.state.status,
-      projectIdentifier: this.state.projectIdentifier
     };
 
     //console.log(newProject);
@@ -158,6 +164,12 @@ class AddProjectTask extends Component {
 }
 
 AddProjectTask.propTypes = {
-  addProjectTask: PropTypes.func.isRequired
+  addProjectTask: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
 };
-export default connect(null, { addProjectTask })(AddProjectTask);
+
+const mapStateToProps = state => ({
+    errors: state.errors
+  });
+
+export default connect(mapStateToProps, { addProjectTask })(AddProjectTask);
